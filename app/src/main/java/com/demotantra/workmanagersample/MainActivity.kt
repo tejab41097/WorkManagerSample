@@ -8,30 +8,37 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.demotantra.workmanagersample.NotifyWork.Companion.NOTIFICATION_ID
 import com.demotantra.workmanagersample.NotifyWork.Companion.NOTIFICATION_WORK
+import com.demotantra.workmanagersample.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         userInterface()
     }
 
     private fun userInterface() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
         val titleNotification = getString(R.string.notification_title)
-        collapsing_toolbar_l.title = titleNotification
+        binding.collapsingToolbarL.title = titleNotification
 
-        done_fab.setOnClickListener {
+        binding.doneFab.setOnClickListener {
             val customCalendar = Calendar.getInstance()
             customCalendar.set(
-                date_p.year, date_p.month, date_p.dayOfMonth, time_p.hour, time_p.minute, 0
+                binding.dateP.year,
+                binding.dateP.month,
+                binding.dateP.dayOfMonth,
+                binding.timeP.hour,
+                binding.timeP.minute,
+                0
             )
             val customTime = customCalendar.timeInMillis
             val currentTime = System.currentTimeMillis()
@@ -43,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 val titleNotificationSchedule = getString(R.string.notification_schedule_title)
                 val patternNotificationSchedule = getString(R.string.notification_schedule_pattern)
                 Snackbar.make(
-                    coordinator_l,
+                    binding.coordinatorL,
                     titleNotificationSchedule + SimpleDateFormat(
                         patternNotificationSchedule, Locale.getDefault()
                     ).format(customCalendar.time).toString(),
@@ -51,7 +58,8 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             } else {
                 val errorNotificationSchedule = getString(R.string.notification_schedule_error)
-                Snackbar.make(coordinator_l, errorNotificationSchedule, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.coordinatorL, errorNotificationSchedule, Snackbar.LENGTH_LONG)
+                    .show()
             }
         }
     }
